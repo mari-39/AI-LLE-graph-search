@@ -37,26 +37,24 @@ class SearchProblem(ABC, Generic[S]):
         # 2. simulate all possible actions
         avActions = self.world.available_actions()[0]
         consequences = []
-        print(avActions)
+        print("all available actions:", avActions)
 
         # set world to given state
         self.world.set_state(state)
+        givenState = self.world.get_state()
 
-        # loop through list of actions, perform each one, store resulting state, then reset to given state
-        for action in avActions:
-            self.world.step([action]) # this changes self.world
-            newState = self.world.get_state()
+        if all(givenState.agents_alive): # we only care about successors if agent is alive
 
-            if all(newState.agents_alive):
-                consequences.append(newState)
-                print(self.world.step(action))
-            else:
-                consequences.append(None)
+            for action in avActions:
+                self.world.step([action]) # this changes self.world
+                newState = self.world.get_state()
 
-            # reset to given state before performing next action in list
-            self.world.set_state(state)
+                consequences.append(newState) # store the new state
 
-        # 3. return to original world, to avoid any real changes being made
+                # reset to given state before performing next action in list
+                self.world.set_state(state)
+
+        # return to original world, to avoid any real changes being made
         self.world.set_state(originalState)
         return list(zip(consequences, avActions))
         
