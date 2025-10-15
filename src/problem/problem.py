@@ -27,8 +27,39 @@ class SearchProblem(ABC, Generic[S]):
         Returns  all possible states that can be reached from the given world state.
 
         Note that if an agent dies, the game is over and there is no successor to that state.
-        """
-        raise NotImplementedError()
+        """         
+        # you get a WS e.g., WS { agents_positions: [(10, 9)], gems_collected: [true], agents_alive: [true] }
+        # now you want [[WS0, North], [WS1, South], ...]
+
+        # 1. load state into the world, but keep original world to restore later
+        originalState = self.world.get_state()
+
+        # 2. simulate all possible actions
+        avActions = self.world.available_actions()[0]
+        consequences = []
+        print(avActions)
+
+        # set world to given state
+        self.world.set_state(state)
+
+        # loop through list of actions, perform each one, store resulting state, then reset to given state
+        for action in avActions:
+            self.world.step([action]) # this changes self.world
+            newState = self.world.get_state()
+
+            if all(newState.agents_alive):
+                consequences.append(newState)
+                print(self.world.step(action))
+            else:
+                consequences.append(None)
+
+            # reset to given state before performing next action in list
+            self.world.set_state(state)
+
+        # 3. return to original world, to avoid any real changes being made
+        self.world.set_state(originalState)
+        return list(zip(consequences, avActions))
+        
 
     def heuristic(self, problem_state: S) -> float:
         raise NotImplementedError()
