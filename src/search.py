@@ -51,6 +51,8 @@ def dfs(problem: SearchProblem) -> Optional[Solution]:
 
 
 def bfs(problem: SearchProblem) -> Optional[Solution]:
+    # TODO: call get_successors for current world state
+    # do recursive bfs for each successor
     raise NotImplementedError()
 
 
