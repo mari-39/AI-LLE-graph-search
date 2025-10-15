@@ -35,28 +35,29 @@ class SearchProblem(ABC, Generic[S]):
         originalState = self.world.get_state()
 
         # 2. simulate all possible actions
-        avActions = self.world.available_actions()[0]
+        avActions = self.world.available_actions() # list of list of actions, one list per agent
+        actions = []
         consequences = []
-        print("all available actions:", avActions)
 
         # set world to given state
         self.world.set_state(state)
         givenState = self.world.get_state()
 
         if all(givenState.agents_alive): # we only care about successors if agent is alive
+            for actionsForAgent in avActions:
+                for action in actionsForAgent:
+                    self.world.step([action]) # this changes self.world
+                    newState = self.world.get_state()
 
-            for action in avActions:
-                self.world.step([action]) # this changes self.world
-                newState = self.world.get_state()
+                    consequences.append(newState) # store the new state
+                    actions.append(action)
 
-                consequences.append(newState) # store the new state
-
-                # reset to given state before performing next action in list
-                self.world.set_state(state)
+                    # reset to given state before performing next action in list
+                    self.world.set_state(state)
 
         # return to original world, to avoid any real changes being made
         self.world.set_state(originalState)
-        return list(zip(consequences, avActions))
+        return list(zip(consequences, actions))
         
 
     def heuristic(self, problem_state: S) -> float:
