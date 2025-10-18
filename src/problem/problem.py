@@ -18,6 +18,7 @@ class SearchProblem(ABC, Generic[S]):
         world.reset()
         self.initial_state = world.get_state()
 
+
     @abstractmethod
     def is_goal_state(self, problem_state: S) -> bool:
         """Whether the given state is the goal state"""
@@ -34,14 +35,15 @@ class SearchProblem(ABC, Generic[S]):
         # 1. load state into the world, but keep original world to restore later
         originalState = self.world.get_state()
 
+        # set world to given state
+        self.world.set_state(state)
+        givenState = self.world.get_state()
+
+
         # 2. simulate all possible actions
         avActions = self.world.available_actions() # list of list of actions, one list per agent
         actions = []
         consequences = []
-
-        # set world to given state
-        self.world.set_state(state)
-        givenState = self.world.get_state()
 
         if all(givenState.agents_alive): # we only care about successors if agent is alive
             for actionsForAgent in avActions:

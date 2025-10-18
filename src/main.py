@@ -1,5 +1,7 @@
 import cv2
 from lle import World, Action
+#from search import bfs
+#from problem import ExitProblem
 
 
 def show(world: World):
@@ -7,6 +9,7 @@ def show(world: World):
     cv2.imshow("Visualisation", img)
     cv2.waitKey(1)
 
+#bfs(ExitProblem(World('\nS0 . . . . . . . . . . .\n.  . . X . . . . . . . .…')))
 
 world = World.level(1)
 world.reset()
