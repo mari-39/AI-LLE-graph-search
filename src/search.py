@@ -51,7 +51,34 @@ def dfs(problem: SearchProblem) -> Optional[Solution]:
 
 
 def bfs(problem: SearchProblem) -> Optional[Solution]:
-    raise NotImplementedError()
+    queue = PriorityQueue()
+    initialState = problem.initial_state # first State of (sub)-tree
+    #print("intialState: ", initialState)
+    root = SearchNode(initialState, None, None)
+    visitedStates = set()
+    
+
+    queue.push(root, queue.count)
+    visitedStates.add(root)
+
+    while not(queue.is_empty()):
+        parentNode = queue.pop()
+        #print("chosen node: ", parentNode)
+        parentState = parentNode.state
+
+        if problem.is_goal_state(parentState):
+            return Solution.from_node(parentNode)
+
+        childrenStates = problem.get_successors(parentState) # gets next layer
+
+        for child in childrenStates:
+            queue.count += 1
+            childNode = SearchNode(child[0], parentNode, child[1])
+            #print("updated Prio: ", queue.count)
+            if not(childNode in visitedStates):
+                queue.push(childNode, queue.count)
+                visitedStates.add(childNode)
+    return None
 
 
 def astar(problem: SearchProblem) -> Optional[Solution]:
