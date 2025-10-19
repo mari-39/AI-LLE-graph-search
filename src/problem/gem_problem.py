@@ -17,15 +17,15 @@ class GemProblem(SearchProblem[WorldState]):
             if not collected_status]
         
         if (not(all(problem_state.gems_collected))):
-            min_dist_collection = min(self.distance(agentPosn, gemPosn) # COST OF ONE GEM COLLECTION / START: we need to collect min. 1 gem, make it the cheapest
+            min_dist_collection = min(self.manhattanDist(agentPosn, gemPosn) # COST OF ONE GEM COLLECTION / START: we need to collect min. 1 gem, make it the cheapest
                                     for agentPosn in agentPosnList
                                     for gemPosn in gemPosnList)
             
-            min_dist_gem_exit = min(self.distance(gemPosn, exitPosn) # COST OF EXIT: we end up at a gem and look at the best-case distance of the last gem to the nearest exit 
+            min_dist_gem_exit = min(self.manhattanDist(gemPosn, exitPosn) # COST OF EXIT: we end up at a gem and look at the best-case manhattanDist of the last gem to the nearest exit 
                 for exitPosn in exitPosnList 
                 for gemPosn in gemPosnList)
         
             return  min_dist_collection + min_dist_gem_exit
         
         else:
-            return sum(min(self.distance(agentPosn, exitPosn) for exitPosn in exitPosnList) for agentPosn in agentPosnList)
+            return sum(min(self.manhattanDist(agentPosn, exitPosn) for exitPosn in exitPosnList) for agentPosn in agentPosnList)
