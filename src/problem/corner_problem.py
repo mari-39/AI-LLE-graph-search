@@ -21,3 +21,13 @@ class CornerProblem(SearchProblem[CornerState]):
             # next_state = CornerState(...)
             raise NotImplementedError()
         return successors
+
+    def heuristic(self, problem_state: WorldState) -> float:
+        height = self.world.height
+        width = self.world.width
+
+        agentPosnList = problem_state.agents_positions
+        exitPosnList = self.world.exit_pos
+        cornerPosnList = [[0, 0], [0, height], [width, 0], [width, height]]
+        
+        return 0.0
