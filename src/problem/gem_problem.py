@@ -21,11 +21,14 @@ class GemProblem(SearchProblem[WorldState]):
                                     for agentPosn in agentPosnList
                                     for gemPosn in gemPosnList)
             
-            min_dist_gem_exit = min(self.manhattanDist(gemPosn, exitPosn) # COST OF EXIT: we end up at a gem and look at the best-case manhattanDist of the last gem to the nearest exit 
-                for exitPosn in exitPosnList 
-                for gemPosn in gemPosnList)
+            min_dist_exit = max(min(self.manhattanDist(agentPosn, exitPosn) 
+                                    for exitPosn in exitPosnList) 
+                                    for agentPosn in agentPosnList)
+
         
-            return  min_dist_collection + min_dist_gem_exit
+            return  min_dist_collection + min_dist_exit
         
         else:
-            return sum(min(self.manhattanDist(agentPosn, exitPosn) for exitPosn in exitPosnList) for agentPosn in agentPosnList)
+            return max(min(self.manhattanDist(agentPosn, exitPosn) 
+                           for exitPosn in exitPosnList) 
+                           for agentPosn in agentPosnList)
