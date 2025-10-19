@@ -47,7 +47,42 @@ class SearchNode:
 
 
 def dfs(problem: SearchProblem) -> Optional[Solution]:
-    raise NotImplementedError()
+    stack = PriorityQueue()
+    initialState = problem.initial_state # first State of (sub)-tree
+    #print("intialState: ", initialState)
+    root = SearchNode(initialState, None, None)
+    visitedStates = set()
+    
+
+    stack.push(root, stack.count)
+    visitedStates.add(root)
+
+    while not(stack.is_empty()):
+        parentNode = stack.pop()
+        #print("chosen node: ", parentNode)
+        parentState = parentNode.state
+
+        if problem.is_goal_state(parentState):
+            return Solution.from_node(parentNode)
+
+        childrenStates = problem.get_successors(parentState) # gets next layer
+
+        for child in reversed(childrenStates): # for left-to-right traversal
+            stack.count += 1
+            childNode = SearchNode(child[0], parentNode, child[1])
+            #print("updated Prio: ", queue.count)
+            if not(childNode in visitedStates):
+                stack.push(childNode, -stack.count) # makes it so that most recent node gets popped => LIFO
+                visitedStates.add(childNode)
+    return None
+
+
+
+    
+# HELPER
+#   expand children[0]
+
+
 
 
 def bfs(problem: SearchProblem) -> Optional[Solution]:
