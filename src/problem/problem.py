@@ -18,6 +18,11 @@ class SearchProblem(ABC, Generic[S]):
         world.reset()
         self.initial_state = world.get_state()
 
+    def manhattanDist(self, start: tuple[int, int], goal: tuple[int, int]) -> int:
+            d_x = abs(start[0] - goal[0])
+            d_y = abs(start[1] - goal[1])
+            return d_x + d_y
+
 
     @abstractmethod
     def is_goal_state(self, problem_state: S) -> bool:
