@@ -61,6 +61,6 @@ class SearchProblem(ABC, Generic[S]):
         self.world.set_state(originalState)
         return list(zip(consequences, actions))
         
-
+    @abstractmethod
     def heuristic(self, problem_state: S) -> float:
         raise NotImplementedError()
