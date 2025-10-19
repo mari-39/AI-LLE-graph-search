@@ -22,7 +22,11 @@ class ExitProblem(SearchProblem[WorldState]):
             return True
         else:
             return False
-            
+        
+    def heuristic(self, problem_state: WorldState) -> float: # this never overstimates, as this is the minimum of moves needed
+        agentPosnList = problem_state.agents_positions
+        exitPosnList = self.world.exit_pos
+        return sum(min(self.manhattanDist(agentPosn, exitPosn) for exitPosn in exitPosnList) for agentPosn in agentPosnList)
         
 
         
